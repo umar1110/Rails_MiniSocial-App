@@ -1,4 +1,126 @@
-<div>
-  <h1 class="font-bold text-4xl bg-red-200">Pages#home</h1>
-  <p>Find me in app/views/pages/home.html.erb</p>
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <div class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <h1 class="text-2xl font-bold text-gray-900">Communities</h1>
+      <p class="text-gray-600">Discover and join amazing communities</p>
+    </div>
+  </div>
+
+  <!-- Instagram Stories Style Communities Section -->
+  <div class="bg-white py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center space-x-4 overflow-x-auto scrollbar-hide pb-2">
+        <!-- Add Community Button (First Item) -->
+        <div class="flex-shrink-0">
+          <%= link_to new_community_path, class: "flex flex-col items-center space-y-2 group" do %>
+            <div class="relative">
+              <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-200">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+              </div>
+              <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-full flex items-center justify-center border-2 border-white">
+                <svg class="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+            </div>
+            <span class="text-xs font-medium text-gray-700 group-hover:text-green-600 transition-colors duration-200">Create</span>
+          <% end %>
+        </div>
+
+        <!-- Communities List -->
+        <% @communities.each do |community| %>
+          <div class="flex-shrink-0">
+            <%= link_to community, class: "flex flex-col items-center space-y-2 group" do %>
+              <div class="relative">
+                <!-- Community Avatar with Border -->
+                <div class="w-16 h-16 rounded-full p-0.5 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 group-hover:from-purple-600 group-hover:via-pink-600 group-hover:to-red-600 transition-all duration-200">
+                  <div class="w-full h-full rounded-full overflow-hidden bg-white p-0.5">
+                    <% if community.profile_picture.attached? %>
+                      <%= image_tag community.profile_picture, class: "w-full h-full object-cover rounded-full" %>
+                    <% else %>
+                      <div class="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+                
+                <!-- Online Status Indicator (Optional) -->
+                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center border-2 border-white">
+                  <div class="w-2 h-2 bg-white rounded-full"></div>
+                </div>
+              </div>
+              
+              <!-- Community Name -->
+              <span class="text-xs font-medium text-gray-700 group-hover:text-purple-600 transition-colors duration-200 text-center max-w-16 truncate">
+                <%= community.name %>
+              </span>
+            <% end %>
+          </div>
+        <% end %>
+
+        <!-- Empty State if no communities -->
+        <% if @communities.empty? %>
+          <div class="flex-shrink-0">
+            <div class="flex flex-col items-center space-y-2">
+              <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+              </div>
+              <span class="text-xs font-medium text-gray-500">No communities yet</span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Welcome to Your Dashboard</h2>
+      <p class="text-gray-600 mb-8">Join communities, share ideas, and connect with like-minded people.</p>
+      
+      <!-- Quick Actions -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <%= link_to new_community_path, 
+            class: "bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center space-x-2" do %>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          <span>Create Community</span>
+        <% end %>
+        
+        <%= link_to communities_path, 
+            class: "bg-gray-200 hover:bg-gray-300 text-gray-800 px-8 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center space-x-2" do %>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <span>Browse All</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
+
+<style>
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Smooth scrolling */
+  .overflow-x-auto {
+    scroll-behavior: smooth;
+  }
+</style>
