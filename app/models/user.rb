@@ -6,9 +6,11 @@ class User < ApplicationRecord
 
   has_one_attached :avatar   
   
-
+  validates :name, presence: true
   # validates :avatar,
   # attached: true,
   # content_type: ['image/png', 'image/jpeg', 'image/jpg'],
   # size: { less_than: 5.megabytes }
+
+  
 end
