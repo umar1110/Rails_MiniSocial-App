@@ -23,7 +23,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <% @communities.each do |community| %>
           <div class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200">
-            <%= link_to community, class: "block" do %>
+            <%= link_to (community.users.include?(current_user) || community.creator == current_user ? community : join_community_path(community)), class: "block" do %>
               <!-- Community Image -->
               <div class="aspect-w-16 aspect-h-9 bg-gray-200 rounded-t-lg overflow-hidden">
                 <% if community.profile_picture.attached? %>
