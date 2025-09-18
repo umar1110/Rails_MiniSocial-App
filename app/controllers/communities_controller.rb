@@ -32,7 +32,8 @@ class CommunitiesController < ApplicationController
         @community = Community.new(community_params)
         @community.creator = current_user
         
-        if @community.save
+        
+        if @community.valid? && @community.save
             # Add creator as a member
             @community.memberships.create(user: current_user)
             

@@ -9,7 +9,7 @@
 
     <!-- Form -->
     <div class="bg-white shadow-sm rounded-lg border">
-      <%= form_with model: @post, local: true, multipart: true, class: "p-6", data: { controller: "image-preview" } do |f| %>
+      <%= form_with model: @post, local: true, multipart: true, class: "p-6", data: { controller: "image-preview", turbo: false } do |f| %>
         <!-- Error Messages -->
         <% if @post.errors.any? %>
           <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">

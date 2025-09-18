@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_18_115248) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_18_152859) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_18_115248) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_comments_on_post_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "communities", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -58,6 +67,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_18_115248) do
     t.datetime "updated_at", null: false
     t.index ["community_id"], name: "index_community_admins_on_community_id"
     t.index ["user_id"], name: "index_community_admins_on_user_id"
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_likes_on_post_id"
+    t.index ["user_id", "post_id"], name: "index_likes_on_user_id_and_post_id", unique: true
+    t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -94,9 +113,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_18_115248) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "comments", "posts"
+  add_foreign_key "comments", "users"
   add_foreign_key "communities", "users", column: "creator_id"
   add_foreign_key "community_admins", "communities"
   add_foreign_key "community_admins", "users"
+  add_foreign_key "likes", "posts"
+  add_foreign_key "likes", "users"
   add_foreign_key "memberships", "communities"
   add_foreign_key "memberships", "users"
   add_foreign_key "posts", "communities"
