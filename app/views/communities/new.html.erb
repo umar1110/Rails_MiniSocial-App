@@ -14,7 +14,7 @@
 
     <!-- Form -->
     <div class="bg-white py-8 px-6 shadow-xl rounded-lg" data-controller="avatar">
-      <%= form_for @community, url: communities_path, method: :post, html: { class: "space-y-6", multipart: true } do |f| %>
+      <%= form_with model: @community, url: communities_path, local: true, multipart: true, class: "space-y-6" do |f| %>
         <!-- Error Messages -->
         <% if @community.errors.any? %>
           <div class="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -155,7 +155,7 @@
 
     <!-- Back Link -->
     <div class="text-center">
-      <%= link_to "← Back to Dashboard", root_path, 
+      <%= link_to "← Back to Home", root_path, 
           class: "text-green-600 hover:text-green-500 text-sm font-medium transition-colors duration-200" %>
     </div>
   </div>

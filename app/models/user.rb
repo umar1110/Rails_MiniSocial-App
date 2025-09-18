@@ -9,6 +9,7 @@ class User < ApplicationRecord
   # Associations
   has_many :memberships , dependent: :destroy
   has_many :communities, through: :memberships
+  has_many :created_communities, class_name: 'Community', foreign_key: 'creator_id', dependent: :destroy
   has_many :posts , dependent: :destroy
   
   validates :name, presence: true

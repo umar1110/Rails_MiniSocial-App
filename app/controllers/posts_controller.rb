@@ -69,12 +69,17 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    # Ensure user can only delete their own posts
-    if @post.user == current_user
+    # Allow post creator or community creator to delete posts
+    if @post.user == current_user || (@post.community && @post.community.creator == current_user)
       @post.destroy
-      redirect_to root_path, notice: "Post deleted successfully!"
+      # Redirect back to community if it's a community post, otherwise to home
+      if @post.community
+        redirect_to @post.community, notice: "Post deleted successfully!"
+      else
+        redirect_to root_path, notice: "Post deleted successfully!"
+      end
     else
-      redirect_to root_path, alert: "You can only delete your own posts."
+      redirect_to root_path, alert: "You can only delete your own posts or posts in communities you created."
     end
   end
 
@@ -89,8 +94,9 @@ class PostsController < ApplicationController
   end
 
   def authorize_user
-    unless @post.user == current_user
-      redirect_to root_path, alert: "You can only edit your own posts."
+    # Allow post creator or community creator to edit/delete posts
+    unless @post.user == current_user || (@post.community && @post.community.creator == current_user)
+      redirect_to root_path, alert: "You can only edit your own posts or posts in communities you created."
     end
   end
 end

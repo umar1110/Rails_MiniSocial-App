@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     member do
       get :join
       post :join, action: :join_post
+      post :create_post, action: :create_post
     end
   end
   

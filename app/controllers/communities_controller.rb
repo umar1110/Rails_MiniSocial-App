@@ -6,13 +6,17 @@ class CommunitiesController < ApplicationController
         params.require(:community).permit(:name, :description, :profile_picture, :user_ids => [])
     end
 
+    def post_params
+        params.require(:post).permit(:content, images: [])
+    end
+
     def index
         @communities = Community.all
     end
 
     def show
         if @community.users.include?(current_user) || @community.creator == current_user
-            @posts = @community.posts
+            @posts = @community.posts.includes(:user, images_attachments: :blob).order(created_at: :desc)
             render :show
         else
             redirect_to join_community_path(@community), alert: "You need to join this community first"
@@ -59,6 +63,29 @@ class CommunitiesController < ApplicationController
         else
             @community.memberships.create(user: current_user)
             redirect_to @community, notice: "Successfully joined the community!"
+        end
+    end
+
+    def create_post
+      
+        @community = Community.find(params[:id])
+      
+        # Check if user is a member or creator
+        unless @community.users.include?(current_user) || @community.creator == current_user
+            redirect_to @community, alert: "You need to be a member to post in this community"
+            return
+        end
+        
+        @post = @community.posts.build(post_params)
+        @post.user = current_user
+        
+   
+        
+        if @post.save
+            redirect_to @community, notice: "Post created successfully!"
+        else
+            @posts = @community.posts.includes(:user, images_attachments: :blob).order(created_at: :desc)
+            render :show, status: :unprocessable_entity
         end
     end
 
