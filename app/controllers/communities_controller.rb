@@ -16,7 +16,7 @@ class CommunitiesController < ApplicationController
 
     def show
         if @community.users.include?(current_user) || @community.creator == current_user
-            @posts = @community.posts.includes(:user, images_attachments: :blob).order(created_at: :desc)
+            @posts = @community.posts.includes(:user, :comments, images_attachments: :blob).order(created_at: :desc)
             render :show
         else
             redirect_to join_community_path(@community), alert: "You need to join this community first"
@@ -85,7 +85,7 @@ class CommunitiesController < ApplicationController
         if @post.save
             redirect_to @community, notice: "Post created successfully!"
         else
-            @posts = @community.posts.includes(:user, images_attachments: :blob).order(created_at: :desc)
+            @posts = @community.posts.includes(:user, :comments, images_attachments: :blob).order(created_at: :desc)
             render :show, status: :unprocessable_entity
         end
     end

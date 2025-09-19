@@ -1,0 +1,35 @@
+<div class="border-t border-gray-100" data-post-id="<%= post.id %>">
+  <!-- Comments Header -->
+  <div class="px-4 py-3 border-b border-gray-100">
+    <h3 class="text-sm font-semibold text-gray-900 comments-count">
+      Comments (<%= post.comments.count %>)
+    </h3>
+  </div>
+  
+  <!-- Comments List -->
+  <div class="px-4">
+    <% if post.comments.any? %>
+      <div class="py-2 comments-list">
+        <% post.comments.recent.each do |comment| %>
+          <%= render 'comments/comment', comment: comment %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="py-6 text-center comments-list">
+        <p class="text-sm text-gray-500">No comments yet. Be the first to comment!</p>
+      </div>
+    <% end %>
+  </div>
+  
+  <!-- Add Comment Form -->
+  <% if user_signed_in? %>
+    <div class="px-4 py-3 border-t border-gray-100 bg-gray-50 comment-form">
+      <%= render 'comments/form', post: post %>
+    </div>
+  <% else %>
+    <div class="px-4 py-3 border-t border-gray-100 bg-gray-50 text-center">
+      <%= link_to "Sign in to comment", new_user_session_path, 
+          class: "text-sm text-blue-600 hover:text-blue-800 font-medium" %>
+    </div>
+  <% end %>
+</div>

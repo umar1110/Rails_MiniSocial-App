@@ -69,3 +69,5 @@ gem "tailwindcss-rails", "~> 4.3"
 gem "devise", "~> 4.9"
 
 gem "active_model_serializers", "~> 0.10.15"
+
+gem "redis", "~> 5.4"

@@ -9,16 +9,16 @@ class PagesController < ApplicationController
       if user_community_ids.any?
         @posts = Post.where(community_id: nil)
                      .or(Post.where(community_id: user_community_ids))
-                     .includes(:user, :community, images_attachments: :blob)
+                     .includes(:user, :community, :comments, images_attachments: :blob)
                      .order(created_at: :desc)
       else
         @posts = Post.where(community_id: nil)
-                     .includes(:user, :community, images_attachments: :blob)
+                     .includes(:user, :community, :comments, images_attachments: :blob)
                      .order(created_at: :desc)
       end
     else
       @posts = Post.where(community_id: nil)
-                   .includes(:user, :community, images_attachments: :blob)
+                   .includes(:user, :community, :comments, images_attachments: :blob)
                    .order(created_at: :desc)
     end
   end
