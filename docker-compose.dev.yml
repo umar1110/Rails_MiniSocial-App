@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: rails-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_dev_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - rails_dev_network
+
+  web:
+    build: .
+    container_name: rails-app-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=development
+      - REDIS_URL=redis://redis:6379/1
+      - DATABASE_URL=postgresql://postgres:password@db:5432/rails_test_project_development
+    depends_on:
+      - redis
+      - db
+    networks:
+      - rails_dev_network
+    volumes:
+      - .:/rails
+      - ./storage:/rails/storage
+    command: ./bin/rails server -b 0.0.0.0 -p 3000
+
+  db:
+    image: postgres:15-alpine
+    container_name: rails-postgres-dev
+    environment:
+      - POSTGRES_DB=rails_test_project_development
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - rails_dev_network
+
+volumes:
+  redis_dev_data:
+  postgres_dev_data:
+
+networks:
+  rails_dev_network:
+    driver: bridge
