@@ -1,7 +1,22 @@
 Rails.application.routes.draw do
+
+  # Api Routes
+  namespace :api do
+    namespace :v1 do
+      resources :users, only: [:index, :show, :create, :update, :destroy]
+      namespace :auth do
+        resources :sessions, only: [:index]
+      end
+    end
+  end
+
+  # Devise Routes
   devise_for :users
+  # Pages Routes
   get "pages/home"
+  # Users Routes
   get "profile/:id", to: "users#show", as: :user # as users means users_path(user)
+  # Communities Routes
   resources :communities, only: [:new, :create, :show, :index] do
     member do
       get :join
@@ -9,7 +24,7 @@ Rails.application.routes.draw do
       post :create_post, action: :create_post
     end
   end
-  
+  # Posts Routes
   resources :posts, only: [:index, :show, :new, :create, :edit, :update, :destroy ] do
     resources :likes, only: [:create, :destroy]
   end

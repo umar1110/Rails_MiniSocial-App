@@ -6,6 +6,7 @@ class User < ApplicationRecord
 
   has_one_attached :avatar  , dependent: :destroy
   
+  
   # Associations
   has_many :memberships , dependent: :destroy
   has_many :communities, through: :memberships
