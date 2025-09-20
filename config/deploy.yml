@@ -22,7 +22,7 @@ proxy:
   host: app.example.com
 
 # Credentials for your image host.
-registry:
+registry:  # Default is Docker Hub
   # Specify the registry server, if you're not using Docker Hub
   # server: registry.digitalocean.com / ghcr.io / ...
   username: your-user
@@ -32,9 +32,9 @@ registry:
     - KAMAL_REGISTRY_PASSWORD
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
-env:
+env: # Default is Docker Hub
   secret:
-    - RAILS_MASTER_KEY
+    - RAILS_MASTER_KEY 
   clear:
     # Redis URL for ActionCable
     REDIS_URL: redis://redis:6379/1
