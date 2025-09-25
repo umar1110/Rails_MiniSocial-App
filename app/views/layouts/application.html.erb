@@ -11,6 +11,7 @@
     <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= action_cable_meta_tag %>
 
     <%= yield :head %>
 
@@ -26,6 +27,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
+  <body>
     <main class="w-full">
       <%= render "components/common/navbar" %>
       <%= yield %>

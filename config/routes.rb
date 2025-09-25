@@ -29,8 +29,12 @@ Rails.application.routes.draw do
   resources :posts, only: [:index, :show, :new, :create, :edit, :update, :destroy ] do
     resources :likes, only: [:create, :destroy]
     resources :comments, only: [:create, :edit, :update, :destroy]
+    get 'summarize', on: :member, to: 'posts#summarize'
+    get 'temp', on: :member, action: :temp
+    get 'test_broadcast', on: :member, action: :test_broadcast
   end
 
+  
   mount ActionCable.server => '/cable'
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'

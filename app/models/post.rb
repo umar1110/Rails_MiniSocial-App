@@ -9,6 +9,7 @@ class Post < ApplicationRecord
   validates :content, presence: true
   validates :images, length: { maximum: 4 }
   validate :content_or_image
+  # summary is optional - will be populated by AI job
 
   def liked_by?(user)
     return false unless user

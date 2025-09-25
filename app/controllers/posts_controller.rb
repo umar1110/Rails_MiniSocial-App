@@ -1,10 +1,38 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_user, only: [:edit, :update, :destroy]
+  # before_action :authenticate_user!
+  before_action :set_post, only: [:show, :edit, :update, :destroy , :summarize , :temp]
+  before_action :authenticate_user!, only: [:edit, :update, :destroy]
 
   def index
     @posts = Post.where(community_id: nil).includes(:user, images_attachments: :blob).order(created_at: :desc)
+  end
+
+  def summarize
+    Rails.logger.debug "========================> Action ==> Summarizing post #{@post.id}"
+    job = SummarizePostJob.perform_later(@post.id)
+    Rails.logger.debug "========================> Job queued with ID: #{job.job_id}"
+    
+    respond_to do |format|
+      format.html { redirect_to root_path, notice: "Summarizing post..." }
+      format.json { render json: { status: "success", message: "Summarizing post...", job_id: job.job_id } }
+    end
+  end
+
+  def temp
+    # Test job queuing
+    job = SummarizePostJob.perform_later(1)
+    render json: { message: "Hello World", job_id: job.job_id }
+  end
+
+  def test_broadcast
+    # Test ActionCable broadcast
+    ActionCable.server.broadcast("posts_updates", {
+      type: "post_updated",
+      post_id: 999,
+      summary: "This is a test summary from ActionCable!",
+      updated_at: Time.current
+    })
+    render json: { status: "success", message: "Test broadcast sent!" }
   end
 
   def show
@@ -99,4 +127,6 @@ class PostsController < ApplicationController
       redirect_to root_path, alert: "You can only edit your own posts or posts in communities you created."
     end
   end
+
+ 
 end

@@ -72,6 +72,20 @@
   <!-- Main Content Area -->
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
+    <!-- ActionCable Test Button (for debugging) -->
+    <div class="mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded-lg">
+      <h3 class="text-sm font-medium text-yellow-800 mb-2">ActionCable Debug</h3>
+      <div class="space-x-2">
+        <button id="test-actioncable" class="px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">
+          Test Connection
+        </button>
+        <button id="test-broadcast" class="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">
+          Test Broadcast
+        </button>
+      </div>
+      <div id="actioncable-status" class="mt-2 text-sm text-yellow-700"></div>
+    </div>
+    
     <!-- Create Post Section -->
     <div class="bg-white rounded-lg shadow-sm border mb-6">
       <div class="p-4">
@@ -113,9 +127,17 @@
       </div>
       
       <div class="space-y-6">
+      <!-- Test Post for ActionCable (will be hidden in production) -->
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4" data-post-id="999" style="display: none;">
+        <div class="text-sm text-blue-800">
+          <strong>Test Post (ID: 999)</strong> - This will show ActionCable test broadcasts
+        </div>
+        <div class="post-summary mt-2"></div>
+      </div>
+      
       <% if @posts.any? %>
         <% @posts.each do |post| %>
-          <div class="bg-white rounded-lg shadow-sm border">
+          <div class="bg-white rounded-lg shadow-sm border" data-post-id="<%= post.id %>">
             <!-- Post Header -->
             <div class="p-4 border-b border-gray-100">
               <div class="flex items-center justify-between">
@@ -214,9 +236,21 @@
             <!-- Post Content -->
             <div class="p-4">
               <% if post.content.present? %>
+              <!-- Summarize button  -->
                 <div class="text-gray-900 whitespace-pre-wrap mb-4"><%= post.content %></div>
+                <%= link_to "Summarize", summarize_post_path(post), 
+                    data: { 
+                      turbo_method: :get,
+                      remote: true,
+                      confirm: "Generate a summary for this post?"
+                    }, 
+                    class: "btn btn-primary text-end hover:underline summarize-btn",
+                    id: "summarize-btn-#{post.id}" %>
               <% end %>
               
+              <% if post.summary.present? %>
+                <div class="text-gray-900 whitespace-pre-wrap mb-4"><%= post.summary %></div>
+              <% end %>
               <!-- Post Images -->
               <% if post.images.attached? %>
                 <div class="grid gap-2 <%= post.images.count == 1 ? 'grid-cols-1' : post.images.count == 2 ? 'grid-cols-2' : 'grid-cols-2' %>">
