@@ -71,3 +71,9 @@ gem "devise", "~> 4.9"
 gem "active_model_serializers", "~> 0.10.15"
 
 gem "redis", "~> 5.4"
+
+gem "ruby-openai", "~> 8.3"
+
+gem "dotenv-rails", "~> 3.1"
+
+gem "sidekiq", "~> 8.0"
